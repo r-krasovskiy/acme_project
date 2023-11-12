@@ -8,7 +8,9 @@
       Калькулятор ожидания дня рождения
     </div>
     <div class="card-body">
-      <form>
+      <form method="post">
+        <!--Бкез CSRF-токена POST-запрос удет отклонен Django.-->
+        {% csrf_token %}
         <!-- Выводим поля формы с помощью специального тега. -->
         {% bootstrap_form form %}
         <!-- Добавляем кнопку отправки данных. -->
@@ -17,11 +19,17 @@
     </div>
   </div>
   <!-- Присваиваем переменной data объект request.GET -->
-  {% with data=request.GET %}
+  {% with data=request.POST %}
+  <!-- Атрибут instance позволяет обратиться к атрибутам созданных
+  через POST-запрос объектов.-->
+  {% with data=form.instance %}
     <!-- Если в запросе есть параметры... -->
     {% if form.is_valid %}
+      <!--Подтверждение внесения записи в базу данных. -->
+      ID новой записи в БД: {{ data.id }}
+      <hr>
       <!-- ...поприветствуем пользователя: -->
-      <h2>Привет, {{ request.GET.first_name }} {{ request.GET.last_name }}</h>
+      <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h>
       <!-- Если до дня рождения 0 дней... -->
       {% if birthday_countdown == 0 %}
         <!-- ...выводим поздравление: -->
@@ -32,5 +40,6 @@
         Осталось дней до дня рождения: {{ birthday_countdown }}!
       {% endif %}
     {% endif %}
+    {% endwith %}
   {% endwith %}
 {% endblock %}
