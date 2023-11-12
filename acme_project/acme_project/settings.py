@@ -17,6 +17,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'birthday.apps.BirthdayConfig',
     'pages.apps.PagesConfig',
+    # Подключение библиотеки Django для работы
+    # с Bootstrap.
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
