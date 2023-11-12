@@ -4,5 +4,22 @@
 <form>
     {{ form.as_p }}
     <input type="submit" value="Submit">
-  </form> 
+  </form>
+  <!-- Присваиваем переменной data объект request.GET -->
+  {% with data=request.GET %}
+    <!-- Если в запросе есть параметры... -->
+    {% if form.is_valid %}
+      <!-- ...поприветствуем пользователя: -->
+      <h2>Привет, {{ request.GET.first_name }} {{ request.GET.last_name }}</h>
+      <!-- Если до дня рождения 0 дней... -->
+      {% if birthday_countdown == 0 %}
+        <!-- ...выводим поздравление: -->
+        С днём рождения!
+      <!-- Если до дня рождения не ноль дней... -->
+      {% else %}
+        <!-- ...сообщаем, сколько осталось ждать: -->
+        Осталось дней до дня рождения: {{ birthday_countdown }}!
+      {% endif %}
+    {% endif %}
+  {% endwith %}
 {% endblock %}
