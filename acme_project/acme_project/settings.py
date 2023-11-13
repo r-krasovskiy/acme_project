@@ -82,7 +82,8 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+# Локализация форматов веб формы (для отображение даты в форме при редактировании).
+USE_L10N = False
 
 USE_TZ = True
 

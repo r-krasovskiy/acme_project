@@ -3,43 +3,40 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-  <div class="card col-4">
-    <div class="card-header">
-      Калькулятор ожидания дня рождения
-    </div>
-    <div class="card-body">
-      <form method="post">
-        <!--Бкез CSRF-токена POST-запрос удет отклонен Django.-->
-        {% csrf_token %}
-        <!-- Выводим поля формы с помощью специального тега. -->
-        {% bootstrap_form form %}
-        <!-- Добавляем кнопку отправки данных. -->
-        {% bootstrap_button button_type="submit" content="Отправить" %}
-      </form>
-    </div>
-  </div>
-  <!-- Присваиваем переменной data объект request.GET -->
-  {% with data=request.POST %}
-  <!-- Атрибут instance позволяет обратиться к атрибутам созданных
-  через POST-запрос объектов.-->
   {% with data=form.instance %}
-    <!-- Если в запросе есть параметры... -->
+    {% if '/edit/' in request.path %}
+      <h1>Редактировать запись {{ data.pk }}</h1>
+    {% elif "/delete/" in request.path %}
+      <h1>Удалить запись {{ data.pk }}</h1>
+    {% else %}
+      <h1>Создать запись</h1>
+    {% endif %}
+    <div class="card col-4">
+      <div class="card-header">
+        Калькулятор ожидания дня рождения
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% if not "/delete/" in request.path %}
+            {% bootstrap_form form %}
+            {% else %}
+                <p>{{ data.first_name }} {{ data.last_name }}</p>
+                <p>{{ data.birthday }}</p>
+            {% endif %}
+          {% bootstrap_button button_type="submit" content="Отправить" %}
+        </form>
+      </div>
+    </div>
     {% if form.is_valid %}
-      <!--Подтверждение внесения записи в базу данных. -->
-      ID новой записи в БД: {{ data.id }}
+      ID записи в БД: {{ data.id }}
       <hr>
-      <!-- ...поприветствуем пользователя: -->
-      <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h>
-      <!-- Если до дня рождения 0 дней... -->
+      <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
       {% if birthday_countdown == 0 %}
-        <!-- ...выводим поздравление: -->
-        С днём рождения!
-      <!-- Если до дня рождения не ноль дней... -->
+        <p>С днём рождения!</p>
       {% else %}
-        <!-- ...сообщаем, сколько осталось ждать: -->
-        Осталось дней до дня рождения: {{ birthday_countdown }}!
+        <p>Осталось дней до дня рождения: {{ birthday_countdown }}!</p>
       {% endif %}
     {% endif %}
-    {% endwith %}
   {% endwith %}
 {% endblock %}
