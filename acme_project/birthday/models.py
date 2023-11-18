@@ -11,6 +11,8 @@ class Birthday(models.Model):
     )
     # Валидатор указывается в описании поля.
     birthday = models.DateField('Дата рождения', validators=(real_age,))
+    # для работы с картинками нужна сперва установка: pip install Pillow==9.3.0
+    image = models.ImageField('Фото', blank=True, upload_to='birthdays_images')
 
     # Валидатор на уникальность записи:
     # совокупность значений полей «Имя», «Фамилия» и «Дата рождения»

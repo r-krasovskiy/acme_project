@@ -90,3 +90,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# директория для хранения файлов, загружаемых пользователями.
+MEDIA_ROOT = BASE_DIR / 'media'
