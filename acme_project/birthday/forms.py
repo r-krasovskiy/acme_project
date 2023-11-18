@@ -1,8 +1,12 @@
 from django import forms
+# Импортируем класс ошибки валидации.
+from django.core.exceptions import ValidationError
 
 # Импортируем класс модели Birthday.
 from .models import Birthday
 
+# Множество с именами участников Ливерпульской четвёрки.
+BEATLES = {'Джон Леннон', 'Пол Маккартни', 'Джордж Харрисон', 'Ринго Старр'}
 
 # Для использования формы с моделями меняем класс на forms.ModelForm.
 class BirthdayForm(forms.ModelForm):
@@ -20,10 +24,23 @@ class BirthdayForm(forms.ModelForm):
             'birthday': forms.DateInput(attrs={'type': 'date'})
         }
 
-        # Clean-метод для валидации имени (если юзер ввел несколько слов):
-        def clean_first_name(self):
-            # Получаем значение имени из словаря очищенных данных.
-            first_name = self.cleaned_data['first_name']
-            # Разбиваем полученную строку по пробелам
-            # и возвращаем только первое имя.
-            return first_name.split()[0]
+    # Clean-метод для валидации имени (если юзер ввел несколько слов):
+    def clean_first_name(self):
+        # Получаем значение имени из словаря очищенных данных.
+        first_name = self.cleaned_data['first_name']
+        # Разбиваем полученную строку по пробелам
+        # и возвращаем только первое имя.
+        return first_name.split()[0]
+    
+    # Clean-метод для валидации имени (не должно входить в список):
+    def clean(self):
+        # Вызов родительского метода clean с проверкой уникальности записи.
+        super().clean()
+        # Получаем имя и фамилию из очищенных полей формы.
+        first_name = self.cleaned_data['first_name']
+        last_name = self.cleaned_data['last_name']
+        # Проверяем вхождение сочетания имени и фамилии во множество имён.
+        if f'{first_name} {last_name}' in BEATLES:
+            raise ValidationError(
+                'Мы тоже любим Битлз, но введите, пожалуйста, настоящее имя!'
+            )

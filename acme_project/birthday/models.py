@@ -11,3 +11,14 @@ class Birthday(models.Model):
     )
     # Валидатор указывается в описании поля.
     birthday = models.DateField('Дата рождения', validators=(real_age,))
+
+    # Валидатор на уникальность записи:
+    # совокупность значений полей «Имя», «Фамилия» и «Дата рождения»
+    # не должна повторяться в БД.
+    class Meta:
+        constraints = (
+            models.UniqueConstraint(
+                fields=('first_name', 'last_name', 'birthday'),
+                name='Unique person constraint',
+            ),
+        )
