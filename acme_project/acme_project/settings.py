@@ -93,3 +93,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # директория для хранения файлов, загружаемых пользователями.
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Бэкенд filebased.EmailBackend:
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+# Директория, в которую будут сохраняться файлы писем:
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+# Куда попадает юзер после логина:
+LOGIN_REDIRECT_URL = 'pages:homepage'
+
+# Куда попадает юзер для смены пароля:
+LOGIN_URL = 'login'
