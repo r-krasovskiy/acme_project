@@ -20,6 +20,8 @@ class BirthdayForm(forms.ModelForm):
         model = Birthday
         # Указываем, что надо отобразить все поля.
         fields = '__all__'
+        # Указываем, какие поля не отображать в форме.
+        exclude = ('author',)
         # Указываем, что для поля с датой рождения
         # используется виджет с типом данных date.
         widgets = {

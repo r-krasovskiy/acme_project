@@ -1,10 +1,13 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 # Импортируется функция-валидатор.
 from .validators import real_age
 # Импортируем функцию reverse() для получения ссылки на объект.
 from django.urls import reverse
 
+
+User = get_user_model()
 
 class Birthday(models.Model):
     first_name = models.CharField('Имя', max_length=20)
@@ -15,6 +18,9 @@ class Birthday(models.Model):
     birthday = models.DateField('Дата рождения', validators=(real_age,))
     # для работы с картинками нужна сперва установка: pip install Pillow==9.3.0
     image = models.ImageField('Фото', blank=True, upload_to='birthdays_images')
+    author = models.ForeignKey(
+        User, verbose_name='Автор записи', on_delete=models.CASCADE, null=True
+    )
 
     # Валидатор на уникальность записи:
     # совокупность значений полей «Имя», «Фамилия» и «Дата рождения»
