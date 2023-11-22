@@ -24,4 +24,7 @@ urlpatterns = [
         name='registration',
     ),
     # Для просмотра в браузере картинок, загруженных юзером.
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Для кастоизированной страницы, сообщающей об ошибке.
+handler404 = 'core.views.page_not_found'
