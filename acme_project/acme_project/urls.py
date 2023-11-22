@@ -23,8 +23,17 @@ urlpatterns = [
         ),
         name='registration',
     ),
-    # Для просмотра в браузере картинок, загруженных юзером.
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 # Для кастоизированной страницы, сообщающей об ошибке.
 handler404 = 'core.views.page_not_found'
+
+
+# Если проект запущен в режиме разработки...
+if settings.DEBUG:
+    import debug_toolbar
+    # Добавить к списку urlpatterns список адресов из приложения debug_toolbar:
+    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
+
+# Для просмотра в браузере картинок, загруженных юзером.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

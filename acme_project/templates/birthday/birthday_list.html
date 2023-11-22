@@ -17,6 +17,28 @@
           <br>
           <a href="{% url 'birthday:detail' birthday.id %}">Сколько до дня рождения?</a>
         </div>
+        
+        <!--Блок для вывода тегов.-->
+        <div>
+          <!-- Тег spaceless убирает из строки лишние пробелы и переводы строк -->
+          {% spaceless %}
+            {% for tag in birthday.tags.all %}
+            <!-- Если работаем с первым элементом цикла выводим название тега с заглавной буквы -->
+              {% if forloop.first %}
+                <span>{{ tag.tag|title }}</span>
+              {% else %}
+                <span>{{ tag.tag|lower }}</span>
+              {% endif %}
+              <!-- Если обрабатываем не последний элемент цикла после него ставим запятую с пробелом -->
+              {% if not forloop.last %}
+                <span>, </span>
+              {% else %}
+                пользователя {{ birthday.author.username }}
+              {% endif %}
+            {% endfor %}
+          {% endspaceless %}
+        </div>
+      
       </div>
       <!--Проверка цсловия, чтобы только авторы записей могли их редактировать или удалять.-->
       {% if birthday.author == user %}
